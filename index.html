@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 <title>For You 💖</title>
 
 <style>
@@ -17,6 +17,7 @@ height: 100vh;
 overflow: hidden;
 }
 
+/* 💖 common card */
 .app {
 width: 92%;
 max-width: 420px;
@@ -41,6 +42,48 @@ color: #888;
 margin-bottom: 20px;
 }
 
+/* 💖 GATE PAGE */
+.options {
+display: flex;
+justify-content: space-between;
+gap: 16px;
+margin-top: 25px;
+}
+
+.option {
+flex: 1;
+text-align: center;
+padding: 12px;
+border: 2px solid #ffd6e7;
+border-radius: 16px;
+background: #fff7fa;
+position: relative;
+}
+
+
+.option img {
+width: 100%;
+max-width: 110px;
+aspect-ratio: 1/1;
+border-radius: 50%;
+object-fit: cover;
+}
+
+
+/* 💖 name box */
+.name {
+margin-top: 10px;
+font-size: 14px;
+background: #ffe6f0;
+padding: 6px 10px;
+border-radius: 10px;
+display: inline-block;
+position: relative;
+transition: transform 0.15s ease;
+}
+
+
+/* 💌 APP */
 .buttons {
 display: flex;
 flex-direction: column;
@@ -80,7 +123,7 @@ margin-top: 12px;
 background: linear-gradient(135deg, #ff4d88, #e6005c);
 }
 
-/* ✨ typing cursor */
+/* typing */
 .cursor {
 display: inline-block;
 margin-left: 2px;
@@ -92,7 +135,7 @@ animation: blink 1s infinite;
 25%, 75% { opacity: 0; }
 }
 
-/* 💖 floating hearts */
+/* hearts */
 .heart {
 position: absolute;
 bottom: -10px;
@@ -112,13 +155,33 @@ transform: translateY(-100vh) scale(1.6);
 opacity: 0;
 }
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<!-- 💖 PAGE 1: CHAOTIC GATE -->
+<div id="gatePage" class="app">
+<h1>Answer the Question to Unlock Letters 💖</h1>
+<div id="questionText" class="subtitle"></div>
+
+<div class="options">
+
+<div class="option" onclick="enterApp()">
+<img id="yourImg">
+<div class="name">Joanna 😌</div>
+</div>
+
+<div class="option" id="hisOption">
+<img id="hisImg">
+<div class="name" id="hisName">John 😏</div>
+</div>
+
+</div>
+</div>
+
+<!-- 💌 PAGE 2: YOUR APP -->
+<div id="mainApp" class="app" style="display:none;">
 <h1>For You 💖</h1>
 <div class="subtitle">pick your mood…</div>
 
@@ -130,26 +193,70 @@ opacity: 0;
 
 <div id="messageBox">Tap a mood… I’m here 💌</div>
 
-<button class="extra-btn" onclick="repeatMessage()">Show another 💌</button>
 </div>
 
 <script>
+/* 💖 QUESTIONS */
+const questions = [
+"Who is the better cook? 👀",
+"Who is smarter? 😏",
+"Who fell first? 💘",
+"Who is always right? 😌",
+"Who is cuter? 🥺"
+];
+
+/* 🖼️ IMAGES */
+const yourImages = ["you1.jpg","you2.jpg","you3.jpg","you4.jpg","you5.jpg"];
+const hisImages = ["him1.jpg","him2.jpg","him3.jpg","him4.jpg","him5.jpg"];
+
+function getRandom(arr){
+return arr[Math.floor(Math.random()*arr.length)];
+}
+
+/* 🎲 INIT */
+window.onload = function(){
+document.getElementById("questionText").innerText = getRandom(questions);
+document.getElementById("yourImg").src = getRandom(yourImages);
+document.getElementById("hisImg").src = getRandom(hisImages);
+};
+
+/* 😈 CHAOS BUTTON */
+const hisName = document.getElementById("hisName");
+
+hisName.addEventListener("touchstart", moveName);
+hisName.addEventListener("mouseover", moveName);
+
+function moveName() {
+const x = Math.random() * 120 - 60;
+const y = Math.random() * 80 - 40;
+
+hisName.style.transform = `translate(${x}px, ${y}px)`;
+}
+
+
+/* 💖 ENTER APP */
+function enterApp(){
+document.getElementById("gatePage").style.display="none";
+document.getElementById("mainApp").style.display="block";
+}
+
+/* 💌 ORIGINAL APP LOGIC */
 const messages = {
-sad: [
+sad:[
 "Hey… I know today feels heavy, but I'm always on your side ❤️",
 "If I was there, you'd be getting the biggest hug right now.",
 "You don’t have to be strong all the time, I’ve got you.",
 "Even on your worst days, you're still my favorite person.",
 "Bad day? Okay. But you're still my person. That doesn't change."
 ],
-missMe: [
+missMe:[
 "I miss you more. Not even a competition 😤",
 "Imagine me annoying you right now. You're welcome.",
 "Okay but… when are we meeting next 👀",
 "If teleportation existed, I'd already be there.",
 "You're literally my favorite notification."
 ],
-sleep: [
+sleep:[
 "Close your eyes… I’m right there next to you 🤍",
 "Stop overthinking. You deserve rest.",
 "Goodnight… dream about me obviously 😌",
@@ -158,64 +265,56 @@ sleep: [
 ]
 };
 
-let currentMood = null;
+let currentMood=null;
 
-/* 🎲 random */
-function getRandomMessage(mood) {
-const arr = messages[mood];
-return arr[Math.floor(Math.random() * arr.length)];
+function getRandomMessage(mood){
+const arr=messages[mood];
+return arr[Math.floor(Math.random()*arr.length)];
 }
 
-/* ⌨️ typing effect */
-function typeText(text) {
-const box = document.getElementById("messageBox");
-box.innerHTML = "";
-let i = 0;
+function typeText(text){
+const box=document.getElementById("messageBox");
+box.innerHTML="";
+let i=0;
 
-const cursor = document.createElement("span");
-cursor.className = "cursor";
-cursor.innerText = "|";
+const cursor=document.createElement("span");
+cursor.className="cursor";
+cursor.innerText="|";
 box.appendChild(cursor);
 
-const interval = setInterval(() => {
-cursor.insertAdjacentText("beforebegin", text[i]);
+const interval=setInterval(()=>{
+cursor.insertAdjacentText("beforebegin",text[i]);
 i++;
-
-if (i >= text.length) {
+if(i>=text.length){
 clearInterval(interval);
 cursor.remove();
 }
-}, 18);
+},18);
 }
 
-/* 💌 show message */
-function showMessage(mood) {
-currentMood = mood;
+function showMessage(mood){
+currentMood=mood;
 typeText(getRandomMessage(mood));
 }
 
-/* 🔁 repeat */
-function repeatMessage() {
-if (!currentMood) return;
+function repeatMessage(){
+if(!currentMood) return;
 typeText(getRandomMessage(currentMood));
 }
 
-/* 💖 floating hearts */
-function createHeart() {
-const heart = document.createElement("div");
-heart.className = "heart";
-heart.innerText = Math.random() > 0.5 ? "💖" : "💕";
-
-heart.style.left = Math.random() * 100 + "vw";
-heart.style.fontSize = (12 + Math.random() * 18) + "px";
-heart.style.animationDuration = (3 + Math.random() * 2) + "s";
-
+/* 💖 hearts */
+function createHeart(){
+const heart=document.createElement("div");
+heart.className="heart";
+heart.innerText=Math.random()>0.5?"💖":"💕";
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(12+Math.random()*18)+"px";
+heart.style.animationDuration=(3+Math.random()*2)+"s";
 document.body.appendChild(heart);
-
-setTimeout(() => heart.remove(), 5000);
+setTimeout(()=>heart.remove(),5000);
 }
 
-setInterval(createHeart, 400);
+setInterval(createHeart,400);
 </script>
 
 </body>
