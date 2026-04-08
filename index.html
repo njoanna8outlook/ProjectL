@@ -17,7 +17,6 @@ height: 100vh;
 overflow: hidden;
 }
 
-/* 💖 common card */
 .app {
 width: 92%;
 max-width: 420px;
@@ -42,7 +41,6 @@ color: #888;
 margin-bottom: 20px;
 }
 
-/* 💖 GATE PAGE */
 .options {
 display: flex;
 justify-content: space-between;
@@ -70,7 +68,6 @@ object-fit: cover;
 }
 
 
-/* 💖 name box */
 .name {
 margin-top: 10px;
 font-size: 14px;
@@ -83,7 +80,6 @@ transition: transform 0.15s ease;
 }
 
 
-/* 💌 APP */
 .buttons {
 display: flex;
 flex-direction: column;
@@ -123,7 +119,6 @@ margin-top: 12px;
 background: linear-gradient(135deg, #ff4d88, #e6005c);
 }
 
-/* typing */
 .cursor {
 display: inline-block;
 margin-left: 2px;
@@ -135,7 +130,6 @@ animation: blink 1s infinite;
 25%, 75% { opacity: 0; }
 }
 
-/* hearts */
 .heart {
 position: absolute;
 bottom: -10px;
@@ -160,7 +154,6 @@ opacity: 0;
 
 <body>
 
-<!-- 💖 PAGE 1: CHAOTIC GATE -->
 <div id="gatePage" class="app">
 <h1>First Answer the Question Below💖</h1>
 <div id="questionText" class="subtitle"></div>
@@ -180,7 +173,6 @@ opacity: 0;
 </div>
 </div>
 
-<!-- 💌 PAGE 2: YOUR APP -->
 <div id="mainApp" class="app" style="display:none;">
 <h1>For You 💖</h1>
 <div class="subtitle">pick your mood…</div>
@@ -196,7 +188,7 @@ opacity: 0;
 </div>
 
 <script>
-/* 💖 QUESTIONS */
+/*  QUESTIONS */
 const questions = [
 "Who is the better cook? 👀",
 "Who is smarter? 😏",
@@ -205,7 +197,7 @@ const questions = [
 "Who loves the other more?💘 "
 ];
 
-/* 🖼️ IMAGES */
+/* IMAGES */
 const yourImages = ["you1.jpg","you2.jpg","you3.jpg","you4.jpg","you5.jpg"];
 const hisImages = ["him1.jpg","him2.jpg","him3.jpg","him4.jpg","him5.jpg"];
 
@@ -213,14 +205,13 @@ function getRandom(arr){
 return arr[Math.floor(Math.random()*arr.length)];
 }
 
-/* 🎲 INIT */
 window.onload = function(){
 document.getElementById("questionText").innerText = getRandom(questions);
 document.getElementById("yourImg").src = getRandom(yourImages);
 document.getElementById("hisImg").src = getRandom(hisImages);
 };
 
-/* 😈 CHAOS BUTTON */
+/* CHAOS BUTTON */
 const hisName = document.getElementById("hisName");
 
 hisName.addEventListener("touchstart", moveName);
@@ -234,13 +225,13 @@ hisName.style.transform = `translate(${x}px, ${y}px)`;
 }
 
 
-/* 💖 ENTER APP */
+/*  ENTER APP */
 function enterApp(){
 document.getElementById("gatePage").style.display="none";
 document.getElementById("mainApp").style.display="block";
 }
 
-/* 💌 ORIGINAL APP LOGIC */
+/* ORIGINAL APP LOGIC */
 const messages = {
 sad:[
 "Sweetielu, kisses all over your face to get you out of this mood muahhhh",
@@ -302,7 +293,7 @@ if(!currentMood) return;
 typeText(getRandomMessage(currentMood));
 }
 
-/* 💖 hearts */
+/*  hearts */
 function createHeart(){
 const heart=document.createElement("div");
 heart.className="heart";
